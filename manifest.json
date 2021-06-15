@@ -17,7 +17,7 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"*://*.youtube.com/*"
+				"*://*.youtube.com/watch*"
 			],
 			"run_at": "document_idle",
 			"js": [

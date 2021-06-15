@@ -139,15 +139,15 @@ $(document).ready(function(){
     function logArray(prefix='', array, suffix='', and=false) {
         string = prefix
         for (let i = 0; i < array.length; i++) {
-            string += array[i] + (array.length - 1 == i) ? suffix : (and && array.length - 2 == i) ? " and " : ", ";
+            string += array[i] + ((array.length - 1 == i) ? suffix : (and && array.length - 2 == i) ? " and " : ", ");
         }
         console.log(string)
     }
 
     function setCategories(categories) {
-        chrome.storage.local.set({categories : categories}, function(){
+        chrome.storage.local.set({'categories' : categories}, function(){
             logArray('Following Categories are allowed: ', categories,'.')
-            location.reload();
+            // location.reload();
         })
     }
 
@@ -174,13 +174,18 @@ $(document).ready(function(){
         $("#blocked_categories").append(`<br>`)
     }
 
-    $("#setCategories").click(function () {
-        let categories = $("input:checkbox[name=categs]:checked").map(()=>{return $(this).val()}).get()
+    $("#setCategories").click(function (e) {
+        e.preventDefault()
+        let categories = $("input:checkbox[name=categs]:checked").get().map(el => { return $(el).prop('id') })
         console.log(categories)
-        let isWhitelist = $('#whitelist').val()
-        var blacklist = Object.values(youtubeCategoryMappings).filter(categ => !categories.includes(categ));
-        var whitelist = Object.values(youtubeCategoryMappings).filter(categ => categories.includes(categ));
-        categArray = (isWhitelist) ? whitelist : blacklist
+        let isWl = ($('#whitelist').val() == "on") ? true : false
+        if (isWl) {
+            var whitelist = Object.keys(youtubeCategoryMappings).filter(categ => categories.includes(categ));
+            categArray = whitelist
+        } else {
+            var blacklist = Object.keys(youtubeCategoryMappings).filter(categ => !categories.includes(categ));
+            categArray = blacklist
+        }
          console.log(categArray)
          if (activated) {
              alert("You cannot change category options when YouTube Study is activated")
