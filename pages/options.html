@@ -3,46 +3,83 @@
 <head>
     <title>Youtube Blocker Options</title>
     <script src="../js/jquery-3.4.1.min.js"></script>
-    <script src="../css/bootstrap/bootstrap.min.js"></script>
+    <script src="../bootstrap/bootstrap.min.js"></script>
+    <script src="../js/49cfc8cee4.js"></script>
+    <!-- <script src="../categories.js"></script> -->
     <script src="../js/options.js"></script>
     <link rel="stylesheet" type="text/css" href="../css/optionsStyle.css">
     <link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
 </head>
     <body class="container">
-        <h2>Set your Personal Youtube Key</h2>
-        <p>You can create a free Youtube key for your own personal use so the extension knows what videos to block.<br> Google may ask for a payment method
-            but you can remove it after you create your key.
-        </p>
-        <h3>Setup (6 minutes)</h3>
-        <ol>
-            <li>Go to <a href="https://cloud.google.com/">Google's Cloud Platform (GCP)</a> and create a free account using your google account</li>
-            <li>Create a new project</li>
-            <li>Click the left top navigation menu and go to <b>APIs and Services and create a new Youtube Data API</b> </li>
-            <ol><li>You can create up to 10 keys for free if you run out, but this is unlikely.</li></ol>
-            <li>Click credentials in the left hand menu and click Create credentials on the page then click API key in the drop down</li>
-            <li>Copy and paste your new personal API key in the input below to register it to the extension. It will be a long text key like this: <b>AIzaSyAeebo7DlkB6YyCem51Lq9AOAmFG</b></li>
-            <li>Set your API key then press the Activate button on the extension.
-            Refresh the video if it doesn't work right away. Double check your key is correct if doesn't work after 5 refreshes.
-            </li>
-            <li>You can remove your billing account since YouTube Data doesn't cost any money</li>
-        </ol>
-        
-        <label>
-            <b>Input your key below</b>
-            <br>
-            <input type="text" id="API_KEY" required>
-        </label>
-        <button class="btn btn-primary" id="saveKey">Save</button>
-        
-        <p id="currKey"><u>Your current Youtube Key is: </u></p>
-        <h2>Options</h2>  
-        <form id="myForm">
-            <h4>Click __ times to deactivate YouTube blocking</h4>
-            <input type="radio" id="harder10" name="clicksRadio" value="10"> 10<br>
-            <input type="radio" id="harder20" name="clicksRadio" value="20"> 20<br>
-            <input type="radio" id="harder30" name="clicksRadio" value="30"> 30<br>
-            <input type="radio" id="harder100" name="clicksRadio" value="100"> 100<br>
-            <button class="btn btn-primary" id="saveHarderClicks">Save</button>
-        </form>     
+        <div style="text-align: center;"><h1>Options</h1></div>
+        <div>
+            <h2>Options</h2><br>
+            <h4>
+                Select blocked Categories
+                <a class="float-right" data-toggle="collapse" href="#categ" role="button" aria-expanded="true" aria-controls="categ">
+                    <i id="bC" class="fas fa-chevron-right rotate down"></i>
+                </a>
+            </h4><br>
+        </div>
+        <div id="categ" class="show">
+            <form id="blocked_categories">
+                <input type="checkbox" name="mode" id="whitelist" checked>
+                <label for="mode">Whitelist (any checked category is not blocked)</label>
+                <button class="btn btn-primary float-right" id="setCategories">Save</button>
+                <hr>
+                <h5>Categories</h5><br>
+            </form>
+        </div>
+        <div>
+            <h4>
+                Click __ times to deactivate YouTube blocking
+                <a class="float-right" data-toggle="collapse" href="#unbT" role="button" aria-expanded="false" aria-controls="unbT">
+                    <i id="uT" class="fas fa-chevron-right rotate"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="unbT" class="collapse">
+            <form id="unblock_times">
+                <input type="radio" id="harder10" name="clicksRadio" value="10"> 10<br>
+                <input type="radio" id="harder20" name="clicksRadio" value="20"> 20<br>
+                <input type="radio" id="harder30" name="clicksRadio" value="30"> 30<br>
+                <input type="radio" id="harder100" name="clicksRadio" value="100"> 100<br>
+                <button class="btn btn-primary" id="saveHarderClicks">Save</button>
+            </form>     
+        </div>
+        <div style="margin: 50px 0;">
+            <h2>Set your Personal Youtube Key
+                <a class="float-right" data-toggle="collapse" href="#set_API_KEY" role="button" aria-expanded="false" aria-controls="set_API_KEY">
+                    <i id="sAK" class="fas fa-chevron-right rotate"></i>
+                </a>
+            </h2>
+        </div>
+        <div id="set_API_KEY" class="collapse">
+            <p>You can create a free Youtube key for your own personal use so the extension knows what videos to block.<br> Google may ask for a payment method
+                but you can remove it after you create your key.
+            </p>
+            <h3>Setup (6 minutes)</h3>
+            <ol>
+                <li>Go to <a href="https://cloud.google.com/">Google's Cloud Platform (GCP)</a> and create a free account using your google account</li>
+                <li>Create a new project</li>
+                <li>Click the left top navigation menu and go to <b>APIs and Services and create a new Youtube Data API</b> </li>
+                <ul><li>You can create up to 10 keys for free if you run out, but this is unlikely.</li></ul>
+                <li>Click credentials in the left hand menu and click Create credentials on the page then click API key in the drop down</li>
+                <li>Copy and paste your new personal API key in the input below to register it to the extension. It will be a long text key like this: <b>AIzaSyAeebo7DlkB6YyCem51Lq9AOAmFG</b></li>
+                <li>Set your API key then press the Activate button on the extension.
+                Refresh the video if it doesn't work right away. Double check your key is correct if doesn't work after 5 refreshes.
+                </li>
+                <li>You can remove your billing account since YouTube Data doesn't cost any money</li>
+            </ol>
+            
+            <label>
+                <b>Input your key below</b>
+                <br>
+                <input type="text" id="API_KEY" required>
+            </label>
+            <button class="btn btn-primary" id="saveKey">Save</button>
+            
+            <p id="currKey"><u>Your current Youtube Key is: </u></p>
+        </div>
     </body>
 </html>
