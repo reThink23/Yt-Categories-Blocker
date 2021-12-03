@@ -33,17 +33,6 @@ var youtubeCategoryMappings = {
     "44": "Trailers"
 }
 $(document).ready(function(){
-    loadCategories();
-    let activated;
-    getApiKey();
-    $('#saveKey').click(save_options);
-    initiateHarderToDeactivateActions();
-    initiateActivatedValueActions();
-
-    $('.rotate').on("click", () => {
-        $(this).toggleClass("down");
-    })
-
     function initiateActivatedValueActions() {
         chrome.storage.local.get('activated', function(data) {
             if (data.activated === false) {
@@ -152,27 +141,47 @@ $(document).ready(function(){
     }
 
     function getCategories() {
-        chrome.storage.local.get(['categories'], data => {
+        var result = chrome.storage.local.get(['categories'], data => {
             console.log(data.categories)
             return data.categories
         })
+        console.log(result)
+        // return result
     }
 
     function loadCategories() {
-        var categories = getCategories()
-        istoget = (categories) ? true : false
-        for (const key in youtubeCategoryMappings) {
-            if (Object.hasOwnProperty.call(youtubeCategoryMappings, key)) {
-                const cgName = youtubeCategoryMappings[key];
-                // console.log(cgName)
-                $("#blocked_categories").append(`
-                    <input type="checkbox" name="categs" id="${key}" ${(istoget && categories.includes(key)) ? "checked" : ""}>
-                    <label for="${key}">${cgName}</label><br>
-                `)
+        chrome.storage.local.get(['categories'], data => {
+            console.log(data.categories)
+            categories = data.categories
+            console.log(categories)
+            istoget = (categories) ? true : false
+            for (const key in youtubeCategoryMappings) {
+                if (Object.hasOwnProperty.call(youtubeCategoryMappings, key)) {
+                    const cgName = youtubeCategoryMappings[key];
+                    // console.log(cgName)
+                    checked = (istoget && categories.includes(key)) ? "checked" : ""
+                    $("#blocked_categories").append(`
+                        <input type="checkbox" name="categs" id="${key}" ${((istoget && categories.includes(key)) ? "checked" : "")}>
+                        <label for="${key}">${cgName}</label><br>
+                    `)
+                }
             }
-        }
-        $("#blocked_categories").append(`<br>`)
+            $("#blocked_categories").append(`<br>`)
+        })
     }
+
+    loadCategories();
+    let activated;
+    getApiKey();
+    $('#saveKey').click(save_options);
+    initiateHarderToDeactivateActions();
+    initiateActivatedValueActions();
+
+    $('.rotate').on("click", (e) => {
+        // $(this).toggleClass("down");
+        $(event.target).toggleClass("down");
+    })
+
 
     $("#setCategories").click(function (e) {
         e.preventDefault()

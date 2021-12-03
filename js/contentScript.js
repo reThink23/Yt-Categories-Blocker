@@ -59,7 +59,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
  });
  
 function initiate() {
-		let currentUrl = location.href;
+		let currentUrl = location.href.split("&")[0];
 		if (prevUrls.includes(currentUrl)) {
 				console.log('--------- Url already fetched.Not fetching again. ---------')
 				return;
@@ -73,23 +73,43 @@ function initiate() {
 		});
 }
 
-function getCategories() {
-    chrome.storage.local.get(['categories'], data => {
-        console.log(data.categories)
-        return data.categories
-    })
+function getCategory() {
+	videoCategoryString = document.querySelector("meta[itemprop='genre']").getAttribute("content")
+	videoCategory = Object.keys(youtubeCategoryMappings).find(key => youtubeCategoryMappings[key] === videoCategoryString)
+	return [videoCategory, videoCategoryString]
+    // const array = new Uint32Array(5);
+    // const handShake = window.crypto.getRandomValues(array).toString();
+
+    // function propagateVariable(handShake) {
+    // 	const message = { handShake };
+    //  	message['category'] = window['ytInitialPlayerResponse']['microformat']['playerMicroformatRenderer']['category'];
+    //  	window.postMessage(message, "*");
+    // }
+    // (function injectPropagator() {
+    //  		const script = `( ${propagateVariable.toString()} )('${handShake}');`
+    //  		const scriptTag = document.createElement('script');
+    //  		const scriptBody = document.createTextNode(script);
+
+    //  		scriptTag.id = 'chromeExtensionDataPropagator';
+    //  		scriptTag.appendChild(scriptBody);
+    //  		document.body.append(scriptTag);
+	// })();
 }
 
 function processYoutubeData(json, callbackBlockYoutubeUrl) {
-	const allowedIds = getCategories() // ['26', '27', '28']; // video category ids for Howto & Style, Education, Science & technology
-	let videoCategory = json.items[0].snippet.categoryId;
-	let videoCategoryString = youtubeCategoryMappings[videoCategory];
-	console.log("YouTube Video Category: " + videoCategoryString);
-	let isAllowedResult = allowedIds.includes(videoCategory);
-	console.log('isAllowedUrl: ' + isAllowedResult);
-	if(isAllowedResult == false) {
-		callbackBlockYoutubeUrl(videoCategoryString);
-	}
+	chrome.storage.local.get(['categories'], data => {
+		console.log(data.categories)
+		var allowedIds = data.categories // ['26', '27', '28']; // video category ids for Howto & Style, Education, Science & technology
+		categoryData = getCategory()
+		let videoCategory = categoryData[0];
+		let videoCategoryString = categoryData[1];
+		console.log("YouTube Video Category: " + videoCategoryString);
+		let isAllowedResult = allowedIds.includes(videoCategory);
+		console.log('isAllowedUrl: ' + isAllowedResult);
+		if(isAllowedResult == false) {
+			callbackBlockYoutubeUrl(videoCategoryString);
+		}
+	})
 }
 
 
